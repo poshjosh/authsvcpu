@@ -1,0 +1,2 @@
+IF YOU RENAME THE .template files in this directory,
+The installer will not work
