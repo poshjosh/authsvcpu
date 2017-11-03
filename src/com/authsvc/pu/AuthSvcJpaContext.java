@@ -1,6 +1,6 @@
 package com.authsvc.pu;
 
-import com.bc.jpa.JpaContextImpl;
+import com.bc.jpa.context.JpaContextImpl;
 import com.bc.jpa.util.PersistenceURISelector;
 import com.bc.sql.SQLDateTimePatterns;
 import java.io.File;

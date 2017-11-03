@@ -16,7 +16,7 @@
 package com.authsvc.pu;
 
 import com.authsvc.pu.entities.App;
-import com.bc.jpa.JpaContext;
+import com.bc.jpa.context.JpaContext;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,7 +26,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.bc.jpa.dao.BuilderForSelect;
+import com.bc.jpa.dao.Select;
 
 /**
  *
@@ -69,7 +69,7 @@ System.out.println("ClassLoader.getResource: "+uri);
         uri = jpaContext.getPersistenceConfigURI();
 System.out.println("JpaContext.getPersistenceConfigURI: "+uri);                
         
-        try(BuilderForSelect<App> qb = jpaContext.getBuilderForSelect(App.class)) {
+        try(Select<App> qb = jpaContext.getDaoForSelect(App.class)) {
          
             List<App> appList = qb.from(App.class).createQuery().getResultList();
             
