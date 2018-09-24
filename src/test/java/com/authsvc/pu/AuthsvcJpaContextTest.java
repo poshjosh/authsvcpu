@@ -16,7 +16,7 @@
 package com.authsvc.pu;
 
 import com.authsvc.pu.entities.App;
-import com.bc.jpa.context.JpaContext;
+import com.bc.jpa.dao.JpaObjectFactory;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,14 +27,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.bc.jpa.dao.Select;
+import com.bc.jpa.dao.sql.MySQLDateTimePatterns;
 
 /**
- *
  * @author Josh
  */
-public class AuthSvcJpaContextTest {
+public class AuthsvcJpaContextTest {
     
-    public AuthSvcJpaContextTest() {
+    public AuthsvcJpaContextTest() {
     }
     
     @BeforeClass
@@ -64,18 +64,19 @@ System.out.println("URI.create: "+uri);
         uri = Thread.currentThread().getContextClassLoader().getResource(name).toURI();
 System.out.println("ClassLoader.getResource: "+uri);        
         
-        JpaContext jpaContext = new AuthSvcJpaContext();
+//        final AuthsvcJpaContext jpa = new AuthsvcJpaContext();
         
-        uri = jpaContext.getPersistenceConfigURI();
-System.out.println("JpaContext.getPersistenceConfigURI: "+uri);                
+//        final JpaObjectFactory jpaContext = jpa.getDefaultContext();
+        try(final JpaObjectFactory jpaContext = new AuthsvcJpaObjectFactory(new MySQLDateTimePatterns())) {
         
-        try(Select<App> qb = jpaContext.getDaoForSelect(App.class)) {
-         
-            List<App> appList = qb.from(App.class).createQuery().getResultList();
-            
-            for(App app:appList) {
-                
+            try(Select<App> qb = jpaContext.getDaoForSelect(App.class)) {
+
+                List<App> appList = qb.from(App.class).createQuery().getResultList();
+
+                for(App app:appList) {
+
 System.out.println("App:: ID: "+app.getAppid()+", name: "+app.getUsername()+", email: "+app.getEmailaddress());                
+                }
             }
         }
     }

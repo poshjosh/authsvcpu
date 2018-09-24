@@ -1,38 +1,52 @@
 package com.authsvc.pu;
 
-import com.bc.jpa.context.JpaContextImpl;
-import com.bc.jpa.util.PersistenceURISelector;
-import com.bc.sql.SQLDateTimePatterns;
-import java.io.File;
-import java.io.IOException;
+import com.authsvc.pu.entities.App;
+import com.authsvc.pu.entities.Apptoken;
+import com.authsvc.pu.entities.Appuser;
+import com.authsvc.pu.entities.Userstatus;
+import com.authsvc.pu.entities.Usertoken;
+import com.bc.jpa.dao.functions.EntityManagerFactoryCreator;
+import com.bc.jpa.context.PersistenceUnitContext;
+import com.bc.jpa.context.eclipselink.PersistenceContextEclipselinkOptimized;
+import com.bc.jpa.metadata.PersistenceMetaData;
+import com.bc.jpa.dao.sql.MySQLDateTimePatterns;
+import com.bc.jpa.dao.sql.SQLDateTimePatterns;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
  * @author Josh
  */
-public class AuthSvcJpaContext extends JpaContextImpl {
+public class AuthsvcJpaContext extends PersistenceContextEclipselinkOptimized {
     
-    public static enum userstatus{Unactivated, Activated, Deactivated, Unregistered}
-
-    public AuthSvcJpaContext() throws IOException, URISyntaxException {
-        super(Thread.currentThread().getContextClassLoader().getResource("META-INF/persistence.xml").toURI(), 
-                new Class[]{userstatus.class});
+    public AuthsvcJpaContext() throws URISyntaxException {
+        this(Thread.currentThread().getContextClassLoader().getResource("META-INF/persistence.xml").toURI(),
+                new MySQLDateTimePatterns());
     }
 
-    public AuthSvcJpaContext(String persistenceFile, PersistenceURISelector.URIFilter uriFilter, SQLDateTimePatterns dateTimePatterns) throws IOException {
-        super(persistenceFile, uriFilter, dateTimePatterns, new Class[]{userstatus.class});
+    public AuthsvcJpaContext(SQLDateTimePatterns dateTimePatterns) {
+        super(dateTimePatterns, 
+                App.class, Apptoken.class, Appuser.class, Userstatus.class, Usertoken.class);
+    }
+    
+    public AuthsvcJpaContext(URI persistenceConfigUri, SQLDateTimePatterns dateTimePatterns) {
+        super(persistenceConfigUri, dateTimePatterns);
     }
 
-    public AuthSvcJpaContext(URI persistenceFile) throws IOException {
-        super(persistenceFile, new Class[]{userstatus.class});
+    public AuthsvcJpaContext(EntityManagerFactoryCreator emfCreator, SQLDateTimePatterns dateTimePatterns) {
+        super(emfCreator, dateTimePatterns, 
+                App.class, Apptoken.class, Appuser.class, Userstatus.class, Usertoken.class);
     }
 
-    public AuthSvcJpaContext(URI persistenceFile, SQLDateTimePatterns dateTimePatterns) throws IOException {
-        super(persistenceFile, dateTimePatterns, new Class[]{userstatus.class});
+    public AuthsvcJpaContext(URI persistenceConfigUri, EntityManagerFactoryCreator emfCreator, SQLDateTimePatterns dateTimePatterns) {
+        super(persistenceConfigUri, emfCreator, dateTimePatterns);
     }
 
-    public AuthSvcJpaContext(File persistenceFile, SQLDateTimePatterns dateTimePatterns) throws IOException {
-        super(persistenceFile, dateTimePatterns, new Class[]{userstatus.class});
+    public AuthsvcJpaContext(PersistenceMetaData metaData, EntityManagerFactoryCreator emfCreator, SQLDateTimePatterns dateTimePatterns) {
+        super(metaData, emfCreator, dateTimePatterns);
+    }
+    
+    public PersistenceUnitContext getDefaultContext() {
+        return this.getContext(AuthsvcJpaObjectFactory.PERSISTENCE_UNIT_NAME);
     }
 }
