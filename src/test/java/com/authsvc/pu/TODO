@@ -1,0 +1,6 @@
+Test - method: ActivationHandler#execute(AuthSettings arg);
+-----------------------------------------------------------
+Note 
+set(getStatusColumnName(), userstatus.getUserstatusId()) 
+OR
+set(getStatusColumnName(), userstatus) 
