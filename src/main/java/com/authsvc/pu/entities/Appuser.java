@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -69,7 +70,7 @@ public class Appuser implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timemodified;
     @JoinColumn(name = "appid", referencedColumnName = "appid")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private App appid;
     @JoinColumn(name = "userstatus", referencedColumnName = "userstatusid")
     @ManyToOne(optional = false)

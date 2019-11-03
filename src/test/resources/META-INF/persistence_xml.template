@@ -13,6 +13,7 @@
       <property name="javax.persistence.jdbc.user" value="${user}"/>
       <property name="javax.persistence.jdbc.driver" value="${driver}"/>
       <property name="javax.persistence.jdbc.password" value="${password}"/>
+      <property name="eclipselink.weaving" value="static"/>
       <property name="eclipselink.connection-pool.default.initial" value="1"/>
       <property name="eclipselink.connection-pool.default.min" value="64"/>
       <property name="eclipselink.connection-pool.default.max" value="64"/>

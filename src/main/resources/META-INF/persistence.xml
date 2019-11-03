@@ -9,13 +9,17 @@
     <class>com.authsvc.pu.entities.Usertoken</class>
     <class>com.authsvc.pu.entities.Appuser</class>
     <properties>
+      <!--property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/loosebox_authsvc"/-->
+      <!--property name="javax.persistence.jdbc.user" value="root"/-->
+      <!--property name="javax.persistence.jdbc.password" value="Jesus4eva-"/-->
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/loosebox_authsvc?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="loosebox_root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value="7345xT-eeSw"/>
+      <property name="eclipselink.weaving" value="static"/>
       <property name="eclipselink.connection-pool.default.initial" value="1"/>
-      <property name="eclipselink.connection-pool.default.min" value="64"/>
-      <property name="eclipselink.connection-pool.default.max" value="64"/>
+      <property name="eclipselink.connection-pool.default.min" value="8"/>
+      <property name="eclipselink.connection-pool.default.max" value="8"/>
       <property name="eclipselink.jdbc.cache-statements" value="true"/>
       <property name="eclipselink.jdbc.batch-writing" value="JDBC"/> 
       <property name="eclipselink.jdbc.batch-writing.size" value="1000"/>      

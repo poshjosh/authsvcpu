@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -74,7 +75,7 @@ public class App implements Serializable {
     @JoinColumn(name = "userstatus", referencedColumnName = "userstatusid")
     @ManyToOne(optional = false)
     private Userstatus userstatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appid")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appid", fetch = FetchType.LAZY)
     private List<Appuser> appuserList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "appid")
     private Apptoken apptoken;

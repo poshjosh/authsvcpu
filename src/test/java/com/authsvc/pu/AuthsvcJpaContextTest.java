@@ -15,19 +15,22 @@
  */
 package com.authsvc.pu;
 
+import com.authsvc.pu.entities.Appuser;
 import com.authsvc.pu.entities.App;
 import com.bc.jpa.dao.JpaObjectFactory;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import com.bc.jpa.dao.Select;
+import com.bc.jpa.dao.functions.GetColumnNames;
+import com.bc.jpa.dao.functions.GetEntityClasses;
 import com.bc.jpa.dao.sql.MySQLDateTimePatterns;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.EntityManagerFactory;
+import org.junit.Test;
 
 /**
  * @author Josh
@@ -37,22 +40,14 @@ public class AuthsvcJpaContextTest {
     public AuthsvcJpaContextTest() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
+//    public static void main(String... args) {
+//        try{
+//            new AuthsvcJpaContextTest().testAll();
+//        }catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testAll() throws IOException, URISyntaxException {
         
@@ -68,15 +63,37 @@ System.out.println("ClassLoader.getResource: "+uri);
         
 //        final JpaObjectFactory jpaContext = jpa.getDefaultContext();
         try(final JpaObjectFactory jpaContext = new AuthsvcJpaObjectFactory(new MySQLDateTimePatterns())) {
+            
+            final EntityManagerFactory emf = jpaContext.getEntityManagerFactory();
+            final Set<Class> entityClasses = new GetEntityClasses().apply(emf);
+            for(Class entityClass : entityClasses) {
+                final List<String> columnNames = new GetColumnNames(emf).apply(entityClass);
+                System.out.println("Entity: " + entityClass.getSimpleName() + ", columns: " + columnNames);
+            }        
         
-            try(Select<App> qb = jpaContext.getDaoForSelect(App.class)) {
+            try(Select<App> select = jpaContext.getDaoForSelect(App.class)) {
 
-                List<App> appList = qb.from(App.class).createQuery().getResultList();
+                List<App> appList = select.from(App.class).createQuery().getResultList();
 
                 for(App app:appList) {
 
 System.out.println("App:: ID: "+app.getAppid()+", name: "+app.getUsername()+", email: "+app.getEmailaddress());                
                 }
+            }
+            
+            try(Select<Appuser> select = jpaContext.getDaoForSelect(Appuser.class)) {
+             
+                final Map parameters = new HashMap();
+                parameters.put("appid", 1);
+                parameters.put("emailaddress", "posh.bc@gmail.com");
+//                parameters.put("emailAddress", "posh.bc@gmail.com");
+                
+                select.where(parameters);
+                
+                final List<Appuser> resultList = select.createQuery().getResultList();
+                resultList.stream().forEach((user) -> {
+System.out.println("App user ID: " + user.getAppuserid() + ", appid: " + user.getAppid().getAppid() + ", " + user.getEmailaddress());                
+                });
             }
         }
     }
